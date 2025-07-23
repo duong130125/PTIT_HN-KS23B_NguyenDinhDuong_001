@@ -37,15 +37,19 @@ public class BusService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy xe bus với ID: " + id));
     }
 
-    public Bus update(Long id, Bus bus) {
+    public Bus update(Long id, BusDTO busDTO) {
         Bus existingBus = busRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Xe bus không tồn tại ID: " + id));
 
-        existingBus.setBus_name(bus.getBus_name());
-        existingBus.setRegistration_number(bus.getRegistration_number());
-        existingBus.setTotal_seats(bus.getTotal_seats());
-        existingBus.setImage_bus(bus.getImage_bus());
-        existingBus.setStatus(bus.getStatus());
+        existingBus.setBus_name(busDTO.getBus_name());
+        existingBus.setRegistration_number(busDTO.getRegistration_number());
+        existingBus.setTotal_seats(busDTO.getTotal_seats());
+        existingBus.setStatus(busDTO.getStatus());
+
+        if (busDTO.getImage_bus() != null && !busDTO.getImage_bus().isEmpty()) {
+            String newImageUrl = Cloudinary.uploadImage(busDTO.getImage_bus());
+            existingBus.setImage_bus(newImageUrl);
+        }
 
         return busRepository.save(existingBus);
     }

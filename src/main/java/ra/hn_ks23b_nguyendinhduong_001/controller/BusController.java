@@ -27,15 +27,15 @@ public class BusController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<Bus>> createBus(@ModelAttribute BusDTO busdto) {
-        Bus createdBus = busService.create(busdto);
+    public ResponseEntity<ApiResponse<Bus>> createBus(@ModelAttribute BusDTO busDTO) {
+        Bus createdBus = busService.create(busDTO);
         ApiResponse<Bus> response = new ApiResponse<>(true, "Tạo tuyến xe buýt thành công", createdBus, HttpStatus.CREATED);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Bus>> updateBus(@PathVariable Long id, @RequestBody Bus bus) {
-        Bus updatedBus = busService.update(id, bus);
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<Bus>> updateBus(@PathVariable Long id, @ModelAttribute BusDTO busDTO) {
+        Bus updatedBus = busService.update(id, busDTO);
         ApiResponse<Bus> response = new ApiResponse<>(true, "Cập nhật tuyến xe buýt thành công", updatedBus, HttpStatus.OK);
         return ResponseEntity.ok(response);
     }
